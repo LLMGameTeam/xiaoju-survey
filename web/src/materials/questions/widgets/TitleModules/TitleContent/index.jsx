@@ -1,6 +1,7 @@
 import { defineComponent, watch, ref, computed } from 'vue'
 import { filterXSS } from '@/common/xss'
 import { typeTagLabels } from '@/common/typeEnum.ts'
+import { parseImageLinksInHTML } from '@/common/utils/parseImageLinks'
 
 import './style.scss'
 
@@ -71,7 +72,10 @@ export default defineComponent({
 
     const tagTitle = computed(() => {
       let htmlText = ''
-      htmlText += filterXSS(props.title)
+      // First parse image links, then apply XSS filter
+      // 先解析图片链接，然后应用 XSS 过滤
+      const titleWithImages = parseImageLinksInHTML(props.title)
+      htmlText += filterXSS(titleWithImages)
       htmlText = `<span>${htmlText}</span>`
       if (typeName.value) {
         const index = htmlText.lastIndexOf('</p>')

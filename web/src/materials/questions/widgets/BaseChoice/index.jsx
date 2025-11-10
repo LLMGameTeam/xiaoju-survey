@@ -1,6 +1,7 @@
 import { defineComponent, computed } from 'vue'
 import { findIndex, includes, cloneDeep } from 'lodash-es'
 import { filterXSS } from '@/common/xss'
+import { parseImageLinksInHTML } from '@/common/utils/parseImageLinks'
 import './style.scss'
 
 export default defineComponent({
@@ -143,7 +144,7 @@ export default defineComponent({
                         <label class={'item-title'} for={`${uiTarget}${this.name}${index}`}>
                           {!hideText && (
                             <span
-                              v-html={filterXSS(item.text)}
+                              v-html={filterXSS(parseImageLinksInHTML(item.text))}
                               class="item-title-text"
                               style="display: block; height: auto; padding-top: 9px"
                             ></span>    

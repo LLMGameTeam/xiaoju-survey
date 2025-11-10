@@ -1,4 +1,6 @@
 import { defineComponent, computed, shallowRef, defineAsyncComponent } from 'vue'
+import { parseImageLinksInHTML } from '@/common/utils/parseImageLinks'
+import { filterXSS } from '@/common/xss'
 import '@/render/styles/variable.scss'
 import './index.scss'
 
@@ -41,6 +43,14 @@ export default defineComponent({
       return props.bannerConf.titleConfig?.mainTitle
     })
 
+    // Parse image links in the main title for rendering
+    // 解析主标题中的图片链接用于渲染
+    const parsedMainTitle = computed(() => {
+      if (!mainTitle.value) return ''
+      const titleWithImages = parseImageLinksInHTML(mainTitle.value)
+      return filterXSS(titleWithImages)
+    })
+
     const handleClick = () => {
       if (props.readonly) return
       emit('select')
@@ -66,13 +76,14 @@ export default defineComponent({
       titleClass,
       isTitleHide,
       mainTitle,
+      parsedMainTitle,
       richEditorView,
       handleClick,
       onTitleInput
     }
   },
   render() {
-    const { readonly, mainTitle, onTitleInput, richEditorView } = this
+    const { readonly, mainTitle, parsedMainTitle, onTitleInput, richEditorView } = this
     return (
       <div class={['main-title-warp', !readonly ? 'pd15' : '']} onClick={this.handleClick}>
         {this.isTitleHide ? (
@@ -85,7 +96,7 @@ export default defineComponent({
                 class="mainTitle"
               />
             ) : (
-              <div class="mainTitle" v-html={mainTitle}></div>
+              <div class="mainTitle" v-html={parsedMainTitle}></div>
             )}
           </div>
         ) : (

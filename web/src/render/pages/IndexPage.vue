@@ -8,6 +8,7 @@ import { getPublishedSurveyInfo, getPreviewSchema } from '../api/survey'
 import AlertDialog from '../components/AlertDialog.vue'
 import { useSurveyStore } from '../stores/survey'
 import useCommandComponent from '../hooks/useCommandComponent'
+import { randomSelectQuestions } from '../utils/randomQuestions'
 
 const route = useRoute()
 const surveyStore = useSurveyStore()
@@ -37,18 +38,26 @@ const loadData = (res: any, surveyPath: string) => {
       logicConf,
       pageConf
     } = data.code
+    
+    // Apply random question selection
+    // 应用随机抽题功能
+    const randomizedDataConf = {
+      ...dataConf,
+      dataList: randomSelectQuestions(dataConf.dataList)
+    }
+    
     const questionData = {
       bannerConf,
       baseConf,
       bottomConf,
-      dataConf,
+      dataConf: randomizedDataConf,
       skinConf,
       submitConf,
       pageConf
     }
 
     if (!pageConf || pageConf?.length == 0) {
-      questionData.pageConf = [dataConf.dataList.length]
+      questionData.pageConf = [randomizedDataConf.dataList.length]
     }
 
     document.title = data.title

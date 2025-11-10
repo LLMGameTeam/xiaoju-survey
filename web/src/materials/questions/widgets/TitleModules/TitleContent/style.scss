@@ -24,6 +24,16 @@
     img {
       max-width: 100%;
     }
+    // Inline images in title (parsed from @https://... links)
+    // 标题中的内联图片（从 @https://... 链接解析而来）
+    .inline-image {
+      max-width: 100%;
+      max-height: 3rem;
+      vertical-align: middle;
+      margin: 0.1rem 0.05rem;
+      border-radius: 0.04rem;
+      display: inline-block;
+    }
     .index {
       float: left;
       padding-right: 0.06rem;

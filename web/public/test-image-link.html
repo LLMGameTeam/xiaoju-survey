@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>图片链接功能测试</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+    .test-section {
+      margin: 20px 0;
+      padding: 20px;
+      border: 1px solid #ddd;
+      border-radius: 5px;
+    }
+    .inline-image {
+      max-width: 100%;
+      max-height: 3rem;
+      vertical-align: middle;
+      margin: 0.1rem 0.05rem;
+      border-radius: 0.04rem;
+      display: inline-block;
+    }
+    input {
+      width: 100%;
+      padding: 10px;
+      margin: 10px 0;
+      font-size: 14px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #4A90E2;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    button:hover {
+      background: #357ABD;
+    }
+    .result {
+      margin-top: 20px;
+      padding: 15px;
+      background: #f5f5f5;
+      border-radius: 4px;
+      min-height: 50px;
+    }
+    code {
+      background: #e8e8e8;
+      padding: 2px 6px;
+      border-radius: 3px;
+      font-size: 12px;
+    }
+  </style>
+</head>
+<body>
+  <h1>图片链接功能测试页面</h1>
+  
+  <div class="test-section">
+    <h2>测试 1: 基本格式（无空格）</h2>
+    <p>输入格式：<code>@https://example.com/image.png</code></p>
+    <input type="text" id="test1" value="这是测试文本 @https://via.placeholder.com/150x50/4A90E2/FFFFFF?text=Test 测试完成">
+    <button onclick="test(1)">解析并显示</button>
+    <div class="result" id="result1"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>测试 2: 带空格格式</h2>
+    <p>输入格式：<code>@ https://example.com/image.png</code></p>
+    <input type="text" id="test2" value="这是测试文本 @ https://via.placeholder.com/150x50/E74C3C/FFFFFF?text=Space 测试完成">
+    <button onclick="test(2)">解析并显示</button>
+    <div class="result" id="result2"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>测试 3: 用户提供的链接</h2>
+    <p>输入格式：用户实际URL</p>
+    <input type="text" id="test3" value="欢迎参加问卷 @https://pic-poivre.oss-cn-hangzhou.aliyuncs.com/pics/0fdde94dfec7d228a2fa067c368c0bb.png 调查">
+    <button onclick="test(3)">解析并显示</button>
+    <div class="result" id="result3"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>测试 4: 用户提供的链接（带空格）</h2>
+    <input type="text" id="test4" value="欢迎参加问卷 @ https://pic-poivre.oss-cn-hangzhou.aliyuncs.com/pics/0fdde94dfec7d228a2fa067c368c0bb.png 调查">
+    <button onclick="test(4)">解析并显示</button>
+    <div class="result" id="result4"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>测试 5: 富文本编辑器自动链接格式</h2>
+    <p>富文本编辑器会将URL自动转换为链接标签</p>
+    <textarea id="test5" style="width: 100%; height: 80px;"><p>@<a href="https://via.placeholder.com/150x50/4A90E2/FFFFFF?text=Link" target="_blank">https://via.placeholder.com/150x50/4A90E2/FFFFFF?text=Link</a> </p></textarea>
+    <button onclick="test(5)">解析并显示</button>
+    <div class="result" id="result5"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>测试 6: 用户实际遇到的格式</h2>
+    <textarea id="test6" style="width: 100%; height: 80px;"><p>@<a href="https://pic-poivre.oss-cn-hangzhou.aliyuncs.com/pics/0fdde94dfec7d228a2fa067c368c0bb.png" target="_blank">https://pic-poivre.oss-cn-hangzhou.aliyuncs.com/pics/0fdde94dfec7d228a2fa067c368c0bb.png</a> </p></textarea>
+    <button onclick="test(6)">解析并显示</button>
+    <div class="result" id="result6"></div>
+  </div>
+
+  <script>
+    // 复制parseImageLinks函数（与实际代码一致）
+    function parseImageLinksInHTML(html) {
+      if (!html || typeof html !== 'string') {
+        return html
+      }
+
+      console.log('[Test] Original HTML:', html)
+
+      // 解码 HTML 实体
+      let processedHtml = html
+        .replace(/&commat;/gi, '@')
+        .replace(/&#64;/g, '@')
+        .replace(/&#x40;/gi, '@')
+
+      // 模式1：处理富文本编辑器自动转换的链接：@<a href="...">...</a>
+      const linkPattern = /@\s*<a[^>]+href=["'](https?:\/\/[^"']+?\.(?:jpg|jpeg|png|gif|webp|svg|JPG|JPEG|PNG|GIF|WEBP|SVG))[^"']*["'][^>]*>.*?<\/a>\s*/gi
+      
+      processedHtml = processedHtml.replace(linkPattern, (match, url) => {
+        console.log('[Test] Found link pattern:', match)
+        console.log('[Test] Extracted URL:', url)
+        return `<img src="${url}" class="inline-image" alt="image" />`
+      })
+
+      // 模式2：处理纯文本格式：@https://... 或 @ https://...
+      const imagePattern = /@\s*(https?:\/\/[^\s<>"]+?\.(?:jpg|jpeg|png|gif|webp|svg|JPG|JPEG|PNG|GIF|WEBP|SVG))\s*/gi
+
+      const result = processedHtml.replace(imagePattern, (match, url) => {
+        console.log('[Test] Found plain text pattern:', match)
+        console.log('[Test] Extracted URL:', url)
+        return `<img src="${url}" class="inline-image" alt="image" />`
+      })
+
+      console.log('[Test] Result HTML:', result)
+      return result
+    }
+
+    function test(num) {
+      const inputElement = document.getElementById('test' + num)
+      const input = inputElement.value || inputElement.textContent
+      const resultDiv = document.getElementById('result' + num)
+      
+      console.log('=== Test', num, '===')
+      const parsed = parseImageLinksInHTML(input)
+      
+      resultDiv.innerHTML = parsed
+      
+      // 显示原始结果
+      console.log('[Test] Input:', input)
+      console.log('[Test] Output:', parsed)
+    }
+
+    // 自动运行所有测试
+    window.onload = function() {
+      console.log('页面加载完成，可以点击按钮测试')
+      console.log('模式1（富文本链接）:', /@\s*<a[^>]+href=["'](https?:\/\/[^"']+?\.(?:jpg|jpeg|png|gif|webp|svg|JPG|JPEG|PNG|GIF|WEBP|SVG))[^"']*["'][^>]*>.*?<\/a>\s*/gi)
+      console.log('模式2（纯文本）:', /@\s*(https?:\/\/[^\s<>"]+?\.(?:jpg|jpeg|png|gif|webp|svg|JPG|JPEG|PNG|GIF|WEBP|SVG))\s*/gi)
+    }
+  </script>
+</body>
+</html>
+

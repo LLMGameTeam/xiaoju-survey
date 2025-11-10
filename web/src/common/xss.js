@@ -1,6 +1,12 @@
 import xss from 'xss'
 
 const myxss = new xss.FilterXSS({
+  whiteList: {
+    ...xss.whiteList,
+    // Allow img tags for inline images in titles
+    // 允许标题中的内联图片使用 img 标签
+    img: ['src', 'alt', 'title', 'width', 'height', 'style', 'class']
+  },
   onIgnoreTagAttr(tag, name, value) {
     if (name === 'style' || name === 'class') {
       return `${name}="${value}"`
