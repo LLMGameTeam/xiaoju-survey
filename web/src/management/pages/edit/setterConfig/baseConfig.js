@@ -20,5 +20,17 @@ export default [
       'white_list',
       'team_list'
     ]
+  },
+  {
+    title: '分部分随机抽题',
+    key: 'sectionRandomConfig',
+    formList: [
+      'section_random_part1',
+      'section_random_part1_count',
+      'section_random_part2',
+      'section_random_part2_count',
+      'section_random_part3',
+      'section_random_part3_count'
+    ]
   }
 ]
