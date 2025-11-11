@@ -1,4 +1,6 @@
 import basicConfig from '@materials/questions/common/config/basicConfig'
+import sectionConfig from '@materials/questions/common/config/sectionConfig'
+
 const meta = {
   title: '多选',
   type: 'checkbox',
@@ -90,6 +92,7 @@ const meta = {
   ],
   formConfig: [
     basicConfig,
+    sectionConfig,
     {
       name: 'optionConfig',
       title: '选项配置',

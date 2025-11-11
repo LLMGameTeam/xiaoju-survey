@@ -1,4 +1,5 @@
 import basicConfig from '@materials/questions/common/config/basicConfig'
+import sectionConfig from '@materials/questions/common/config/sectionConfig'
 
 const meta = {
   title: '单选',
@@ -83,7 +84,7 @@ const meta = {
       defaultValue: true
     }
   ],
-  formConfig: [basicConfig, {
+  formConfig: [basicConfig, sectionConfig, {
     name: 'optionConfig',
     title: '选项配置',
     type: 'Customed',

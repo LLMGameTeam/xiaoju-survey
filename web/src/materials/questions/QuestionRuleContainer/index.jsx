@@ -76,11 +76,18 @@ export default defineComponent({
     })
 
     onMounted(() => {
-      $bus.emit && $bus.emit('form.addField', instance)
+      // 特殊题型不需要加入表单验证（如section-title只是标题，不需要验证）
+      const noValidationTypes = ['section-title']
+      if (!noValidationTypes.includes(props.moduleConfig.type)) {
+        $bus.emit && $bus.emit('form.addField', instance)
+      }
     })
 
     onBeforeUnmount(() => {
-      $bus.emit && $bus.emit('form.removeField', instance)
+      const noValidationTypes = ['section-title']
+      if (!noValidationTypes.includes(props.moduleConfig.type)) {
+        $bus.emit && $bus.emit('form.removeField', instance)
+      }
     })
 
     const validate = (trigger, callback = () => {}) => {

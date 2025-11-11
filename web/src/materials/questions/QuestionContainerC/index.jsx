@@ -74,9 +74,13 @@ export default defineComponent({
       ...this.$props
     }
     const BlockComponent = this.BlockComponent
+    // 特殊题型不需要显示标题（如section-title自带标题）
+    const noTitleTypes = ['section-title']
+    const shouldShowTitle = this.showTitle && !noTitleTypes.includes(this.type)
+
     return (
       <div class={['question']}>
-        {this.showTitle && <PreviewTitle {...props} />}
+        {shouldShowTitle && <PreviewTitle {...props} />}
         <div class="question-block">
           {this.BlockComponent ? (
             <BlockComponent

@@ -1,4 +1,5 @@
 import basicConfig from '@materials/questions/common/config/basicConfig'
+import sectionConfig from '@materials/questions/common/config/basicConfig'
 
 const meta = {
   title: '投票',
