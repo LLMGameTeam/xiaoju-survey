@@ -8,7 +8,7 @@ import { getPublishedSurveyInfo, getPreviewSchema } from '../api/survey'
 import AlertDialog from '../components/AlertDialog.vue'
 import { useSurveyStore } from '../stores/survey'
 import useCommandComponent from '../hooks/useCommandComponent'
-import { randomSelectQuestions } from '../utils/randomQuestions'
+import { randomSelectQuestions, randomSelectQuestionsBySection } from '../utils/randomQuestions'
 
 const route = useRoute()
 const surveyStore = useSurveyStore()
@@ -41,9 +41,26 @@ const loadData = (res: any, surveyPath: string) => {
     
     // Apply random question selection
     // 应用随机抽题功能
+    let randomizedDataList
+
+    // Check if section-based random config exists
+    // 检查是否有分部分随机配置
+    if (dataConf.sectionRandomConfig && Object.keys(dataConf.sectionRandomConfig).length > 0) {
+      // Use section-based random selection
+      // 使用分部分随机抽题
+      randomizedDataList = randomSelectQuestionsBySection(
+        dataConf.dataList,
+        dataConf.sectionRandomConfig
+      )
+    } else {
+      // Use original random selection for backward compatibility
+      // 使用原有随机抽题方式（向后兼容）
+      randomizedDataList = randomSelectQuestions(dataConf.dataList)
+    }
+
     const randomizedDataConf = {
       ...dataConf,
-      dataList: randomSelectQuestions(dataConf.dataList)
+      dataList: randomizedDataList
     }
     
     const questionData = {

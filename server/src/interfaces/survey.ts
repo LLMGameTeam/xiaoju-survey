@@ -76,6 +76,7 @@ export interface DataItem {
   innerType?: string;
   cascaderData: CascaderDate;
   quotaDisplay?: boolean;
+  section?: string; // 题目所属部分标识（如：part1, part2, part3）
 }
 
 export interface Option {
@@ -88,8 +89,17 @@ export interface Option {
   quota?: number;
 }
 
+// 分部分随机配置
+export interface SectionRandomConfig {
+  [sectionKey: string]: {
+    enabled: boolean; // 是否启用随机抽题
+    count: number; // 随机抽取的题目数量
+  };
+}
+
 export interface DataConf {
   dataList: DataItem[];
+  sectionRandomConfig?: SectionRandomConfig; // 分部分随机配置
 }
 
 export interface ConfirmAgain {
