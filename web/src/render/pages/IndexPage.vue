@@ -38,13 +38,13 @@ const loadData = (res: any, surveyPath: string) => {
       logicConf,
       pageConf
     } = data.code
-    
+
     // Apply random question selection
     // 应用随机抽题功能
     let randomizedDataList
 
     // Check if section-based random config exists
-    // 检查是否有分部分随机配置
+    // 检查是否存在分部分随机配置
     if (dataConf.sectionRandomConfig && Object.keys(dataConf.sectionRandomConfig).length > 0) {
       // Use section-based random selection
       // 使用分部分随机抽题
@@ -62,7 +62,7 @@ const loadData = (res: any, surveyPath: string) => {
       ...dataConf,
       dataList: randomizedDataList
     }
-    
+
     const questionData = {
       bannerConf,
       baseConf,
@@ -74,7 +74,7 @@ const loadData = (res: any, surveyPath: string) => {
     }
 
     if (!pageConf || pageConf?.length == 0) {
-      questionData.pageConf = [randomizedDataConf.dataList.length]
+      questionData.pageConf = [randomizedDataList.length]
     }
 
     document.title = data.title
