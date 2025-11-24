@@ -53,7 +53,7 @@ const loadData = (res: any, surveyPath: string) => {
         dataConf.sectionRandomConfig
       )
     } else {
-      // Use original random selection (backward compatibility)
+      // Use original random selection for backward compatibility
       // 使用原有随机抽题方式（向后兼容）
       randomizedDataList = randomSelectQuestions(dataConf.dataList)
     }

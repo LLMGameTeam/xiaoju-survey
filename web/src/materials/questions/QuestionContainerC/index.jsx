@@ -74,13 +74,21 @@ export default defineComponent({
       ...this.$props
     }
     const BlockComponent = this.BlockComponent
+    // 特殊题型不需要显示标题（如section-title自带标题）
+    const noTitleTypes = ['section-title']
+    const shouldShowTitle = this.showTitle && !noTitleTypes.includes(this.type)
+
+    // section-title在答题页面应该是只读的，在编辑器中可以编辑
+    // 其他题型在答题页面是可填写的（readonly传入的值）
+    const componentReadonly = this.type === 'section-title' ? true : this.readonly
+
     return (
       <div class={['question']}>
-        {this.showTitle && <PreviewTitle {...props} />}
+        {shouldShowTitle && <PreviewTitle {...props} />}
         <div class="question-block">
           {this.BlockComponent ? (
             <BlockComponent
-              readonly
+              readonly={componentReadonly}
               {...props}
               onBlur={this.onBlur}
               onFocus={this.onFocus}
