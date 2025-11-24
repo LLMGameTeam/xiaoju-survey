@@ -1,4 +1,11 @@
 export const menuItems = {
+  'section-title': {
+    type: 'section-title',
+    snapshot: '/imgs/question-type-snapshot/section-title.webp',
+    path: 'SectionTitleModule',
+    icon: 'tixing-bianti',
+    title: '分部标题'
+  },
   text: {
     type: 'text',
     snapshot: '/imgs/question-type-snapshot/iL84te6xxU1657702189333.webp',
@@ -65,6 +72,10 @@ export const menuItems = {
 }
 
 const menuGroup = [
+  {
+    title: '特殊组件',
+    questionList: ['section-title']
+  },
   {
     title: '输入类题型',
     questionList: ['text', 'textarea']

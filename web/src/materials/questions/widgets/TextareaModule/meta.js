@@ -1,4 +1,5 @@
 import basicConfig from '@materials/questions/common/config/basicConfig'
+import sectionConfig from '@materials/questions/common/config/sectionConfig'
 
 const meta = {
   title: '多行输入框',
@@ -92,6 +93,7 @@ const meta = {
   ],
   formConfig: [
     basicConfig,
+    sectionConfig,
     {
       name: 'valid',
       title: '内容限制格式',
